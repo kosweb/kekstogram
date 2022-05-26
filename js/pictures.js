@@ -1,7 +1,9 @@
 'use strict'
 
-const photoTemplate = document.getElementById('picture-template').content.querySelector('.picture');
+const photoTemplate = document.getElementById('picture').content.querySelector('.picture');
 const pictures = document.querySelector('.pictures');
+const bigPicture = document.querySelector('.big-picture');
+bigPicture.classList.remove('hidden');
 
 const comments = [
 	'Всё отлично!',
@@ -30,7 +32,7 @@ const getRandomIndex = (arr) => {
 	return arr[Math.floor(Math.random() * (arr.length - 1))];
 };
 
-const getPhotos = () => {
+const getPhotosObj = () => {
 	let newArr = [];
 
 	for (let i = 0; i < 25; i++) {
@@ -49,14 +51,14 @@ const getPhotos = () => {
 	return newArr;
 };
 
-const photosObj = getPhotos();
+const photosObj = getPhotosObj();
 
 const renderPhotos = (arr) => {
 	const photoCopy = photoTemplate.cloneNode('true');
 
-	photoCopy.querySelector('img').src = arr.url;
-	photoCopy.querySelector('.picture-comments').textContent = arr.comments.length;
-	photoCopy.querySelector('.picture-likes').textContent = arr.likes;
+	photoCopy.querySelector('.picture__img').src = arr.url;
+	photoCopy.querySelector('.picture__comments').textContent = arr.comments.length;
+	photoCopy.querySelector('.picture__likes').textContent = arr.likes;
 
 	return photoCopy;
 };
@@ -72,3 +74,7 @@ const appendPhotos = (arr) => {
 }
 
 appendPhotos(photosObj);
+
+// bigPicture.querySelector('.gallery-overlay-image').src = photosObj[0].url;
+// bigPicture.querySelector('.likes-count').textContent = photosObj[0].likes;
+// bigPicture.querySelector('.comments-count').textContent = photosObj[0].comments.length;
