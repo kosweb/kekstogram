@@ -1,9 +1,12 @@
 'use strict'
 
 const photoTemplate = document.getElementById('picture').content.querySelector('.picture');
+const commentTemplate = document.getElementById('comment').content.querySelector('.social__comment');
 const pictures = document.querySelector('.pictures');
 const bigPicture = document.querySelector('.big-picture');
+const socialComments = document.querySelector('.social__comments');
 bigPicture.classList.remove('hidden');
+
 
 const comments = [
 	'Всё отлично!',
@@ -42,7 +45,7 @@ const getPhotosObj = () => {
 			likes: getRandomInt(50, 200),
 			comments: comments.slice(getRandomInt(0, comments.length / 2 - 1),
 										 getRandomInt(comments.length / 2, comments.length)),
-			descriptions: getRandomIndex(descriptions)
+			description: getRandomIndex(descriptions)
 		};
 
 		newArr.push(newObj);
@@ -71,10 +74,39 @@ const appendPhotos = (arr) => {
 	}
 
 	return pictures.appendChild(fragment);
-}
+};
+
+const renderComments = (arr) => {
+	const commentCopy = commentTemplate.cloneNode('true');
+
+	commentCopy.querySelector('.social__picture').src = `img/avatar-${getRandomInt(1, 6)}.svg`;
+	commentCopy.querySelector('.social__text').textContent = getRandomIndex(arr.comments);
+
+	return commentCopy;
+};
+
+const appendComments = (arr) => {
+	const fragment = document.createDocumentFragment();
+
+	for (let i = 2; i < 4; i++) {
+		fragment.appendChild(renderComments(arr[i]));
+	}
+
+	return socialComments.appendChild(fragment);
+};
+
+const showBigPhoto = (arr) => {
+	bigPicture.querySelector('.big-picture__img img').src = arr.url;
+	bigPicture.querySelector('.likes-count').textContent = arr.likes;
+	bigPicture.querySelector('.comments-count').textContent = arr.comments.length;
+	bigPicture.querySelector('.social__caption').textContent = arr.description;
+	bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
+	bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
+};
+
 
 appendPhotos(photosObj);
+appendComments(photosObj);
+showBigPhoto(photosObj[2]);
 
-// bigPicture.querySelector('.gallery-overlay-image').src = photosObj[0].url;
-// bigPicture.querySelector('.likes-count').textContent = photosObj[0].likes;
-// bigPicture.querySelector('.comments-count').textContent = photosObj[0].comments.length;
+// console.log(renderComments(photosObj));
