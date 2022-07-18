@@ -1,12 +1,10 @@
-'use strict'
+import { getRandomIndex, getRandomInt } from './util.js';
 
 const photoTemplate = document.getElementById('picture').content.querySelector('.picture');
 const commentTemplate = document.getElementById('comment').content.querySelector('.social__comment');
 const pictures = document.querySelector('.pictures');
 const bigPicture = document.querySelector('.big-picture');
 const socialComments = document.querySelector('.social__comments');
-bigPicture.classList.remove('hidden');
-
 
 const comments = [
 	'Всё отлично!',
@@ -25,15 +23,6 @@ const descriptions = [
 	'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
 	'Вот это тачка!'
 ];
-
-function getRandomInt(min, max) {
-  let rand = min + Math.random() * (max + 1 - min);
-  return Math.floor(rand);
-};
-
-const getRandomIndex = (arr) => {
-	return arr[Math.floor(Math.random() * (arr.length - 1))];
-};
 
 const getPhotosObj = () => {
 	let newArr = [];
@@ -56,40 +45,29 @@ const getPhotosObj = () => {
 
 const photosObj = getPhotosObj();
 
-const renderPhotos = (arr) => {
-	const photoCopy = photoTemplate.cloneNode('true');
-
-	photoCopy.querySelector('.picture__img').src = arr.url;
-	photoCopy.querySelector('.picture__comments').textContent = arr.comments.length;
-	photoCopy.querySelector('.picture__likes').textContent = arr.likes;
-
-	return photoCopy;
-};
-
-const appendPhotos = (arr) => {
+const renderPhotos = () => {
 	const fragment = document.createDocumentFragment();
 
-	for (let i = 0; i < arr.length; i++) {
-		fragment.appendChild(renderPhotos(arr[i]));
-	}
+	photosObj.forEach(el => {
+		const photoCopy = photoTemplate.cloneNode('true');
+
+		photoCopy.querySelector('.picture__img').src = el.url;
+		photoCopy.querySelector('.picture__comments').textContent = el.comments.length;
+		photoCopy.querySelector('.picture__likes').textContent = el.likes;
+		fragment.appendChild(photoCopy)
+	});
 
 	return pictures.appendChild(fragment);
 };
 
 const renderComments = (arr) => {
-	const commentCopy = commentTemplate.cloneNode('true');
-
-	commentCopy.querySelector('.social__picture').src = `img/avatar-${getRandomInt(1, 6)}.svg`;
-	commentCopy.querySelector('.social__text').textContent = getRandomIndex(arr.comments);
-
-	return commentCopy;
-};
-
-const appendComments = (arr) => {
 	const fragment = document.createDocumentFragment();
 
-	for (let i = 2; i < 4; i++) {
-		fragment.appendChild(renderComments(arr[i]));
+	for (let i = 0; i < 2; i++) {
+		const commentCopy = commentTemplate.cloneNode('true');
+		commentCopy.querySelector('.social__picture').src = `img/avatar-${getRandomInt(1, 6)}.svg`;
+		commentCopy.querySelector('.social__text').textContent = getRandomIndex(arr[i].comments);
+		fragment.appendChild(commentCopy);
 	}
 
 	return socialComments.appendChild(fragment);
@@ -105,8 +83,5 @@ const showBigPhoto = (arr) => {
 };
 
 
-appendPhotos(photosObj);
-appendComments(photosObj);
-showBigPhoto(photosObj[2]);
-
-// console.log(renderComments(photosObj));
+renderPhotos();
+renderComments(photosObj);

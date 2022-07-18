@@ -42,7 +42,7 @@
             </fieldset>
 
             <!-- Форма редактирования изображения -->
-            <div class="img-upload__overlay  hidden">
+            <div class="img-upload__overlay">
               <div class="img-upload__wrapper">
                 <div class="img-upload__preview-container">
 
@@ -61,8 +61,8 @@
 
                   <!-- Изменение глубины эффекта, накладываемого на изображение -->
                   <fieldset class="img-upload__effect-level  effect-level">
-                    <input class="effect-level__value" type="number" name="effect-level" value="100">
-                    <div class="effect-level__slider"></div>
+                    <input class="effect-level__value" type="range" name="effect-level" min="0" max="100" value="0">
+										<div class="effect-level__number"><span>0</span></div>
                   </fieldset>
 
                   <!-- Кнопка для закрытия формы редактирования изображения -->
@@ -247,7 +247,7 @@
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
 
-  <script src="js/pictures.js"></script>
+  <script src="js/main.js" type="module"></script>
   <!-- <script src="js/main.js" type="module"></script> -->
   <!-- <script src="./nouislider/nouislider.js"></script> -->
   <!-- <script src="./js/main.bundle.js"></script> -->
