@@ -66,7 +66,7 @@ const renderComments = (arr) => {
 	for (let i = 0; i < 2; i++) {
 		const commentCopy = commentTemplate.cloneNode('true');
 		commentCopy.querySelector('.social__picture').src = `img/avatar-${getRandomInt(1, 6)}.svg`;
-		commentCopy.querySelector('.social__text').textContent = getRandomIndex(arr[i].comments);
+		commentCopy.querySelector('.social__text').textContent = getRandomIndex(arr.comments);
 		fragment.appendChild(commentCopy);
 	}
 
@@ -74,6 +74,7 @@ const renderComments = (arr) => {
 };
 
 const showBigPhoto = (arr) => {
+	bigPicture.classList.remove('hidden');
 	bigPicture.querySelector('.big-picture__img img').src = arr.url;
 	bigPicture.querySelector('.likes-count').textContent = arr.likes;
 	bigPicture.querySelector('.comments-count').textContent = arr.comments.length;
@@ -84,4 +85,6 @@ const showBigPhoto = (arr) => {
 
 
 renderPhotos();
-renderComments(photosObj);
+
+export { showBigPhoto, renderComments };
+export { photosObj, socialComments, bigPicture };

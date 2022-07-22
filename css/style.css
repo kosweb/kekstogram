@@ -1065,6 +1065,7 @@ main {
   left: 100%;
 
   margin-left: 10px;
+	cursor: pointer;
 }
 
 .social__footer {

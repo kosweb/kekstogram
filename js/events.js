@@ -1,5 +1,8 @@
 import { isEscEvent } from './util.js';
+import { showBigPhoto, renderComments } from './pictures.js';
+import { photosObj, socialComments, bigPicture } from './pictures.js';
 
+const rangeMaxValue = 100;
 const imgUploadCancel = document.querySelector('.img-upload__cancel');
 const imgUploadInput = document.querySelector('.img-upload__input');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
@@ -7,12 +10,43 @@ const rangeField = document.querySelector('.effect-level');
 const rangeInput = document.querySelector('.effect-level__value');
 const rangeInputValue = document.querySelector('.effect-level__number span');
 const effectItems = document.querySelectorAll('.effects__radio');
-const rangeMaxValue = 100;
 const scaleControlSmallerButton = document.querySelector('.scale__control--smaller');
 const scaleControlBiggerButton = document.querySelector('.scale__control--bigger');
 const scaleControlValue = document.querySelector('.scale__control--value');
 const imgUploadPreviewWrapper = document.querySelector('.img-upload__preview');
 const imgUploadPreview = document.querySelector('.img-upload__preview img');
+const bigPictureClose = document.querySelector('.big-picture__cancel');
+const picturesImg = document.querySelectorAll('.picture__img');
+
+function closeBigPicture() {
+	bigPicture.classList.add('hidden');
+	document.removeEventListener('keydown', onBigPhotoEscPress);
+};
+
+const onBigPhotoEscPress = (evt) => {
+	if (isEscEvent(evt)) {
+		evt.preventDefault();
+		closeBigPicture();
+	}
+};
+
+bigPictureClose.addEventListener('click', (evt) => {
+	evt.preventDefault();
+	closeBigPicture();
+});
+
+picturesImg.forEach((el, i) => {
+	el.addEventListener('click', (evt) => {
+		evt.preventDefault();
+		while (socialComments.firstChild) {
+			socialComments.removeChild(socialComments.firstChild);
+		}
+		renderComments(photosObj[i]);
+		showBigPhoto(photosObj[i]);
+		document.addEventListener('keydown', onBigPhotoEscPress);
+	});
+});
+
 
 scaleControlSmallerButton.addEventListener('click', function(evt) {
 	evt.preventDefault();
