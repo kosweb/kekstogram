@@ -17,6 +17,47 @@ const imgUploadPreviewWrapper = document.querySelector('.img-upload__preview');
 const imgUploadPreview = document.querySelector('.img-upload__preview img');
 const bigPictureClose = document.querySelector('.big-picture__cancel');
 const picturesImg = document.querySelectorAll('.picture__img');
+const hashTagsInput = document.querySelector('.text__hashtags');
+const commentsField = document.querySelector('.text__description');
+
+hashTagsInput.addEventListener('input', () => {
+	let hashTagsArr = hashTagsInput.value.trim().split(' ');
+	for (let el of hashTagsArr) {
+		if (el === '') {
+			hashTagsInput.setCustomValidity('Используйте только один пробел!');
+			break;
+		}
+
+		if (el.indexOf('#') !== 0) {
+			hashTagsInput.setCustomValidity('Имя хэш-тега должно начинаться с символа "#"');
+			break;
+		}
+
+		if (el.length === 1) {
+			hashTagsInput.setCustomValidity('Имя хэш-тега не может содержать только символ "#"');
+			break;
+		}
+
+		if (el.length > 20) {
+			hashTagsInput.setCustomValidity('Максимальная длина одного хэш-тега 20 символов');
+			break;
+		}
+
+		hashTagsInput.setCustomValidity('');
+	}
+
+	if (hashTagsArr.length > 5) {
+		hashTagsInput.setCustomValidity('Нельзя использовать больше пяти хэш-тегов!');
+	}
+
+	for (let i = 0; i < hashTagsArr.length - 1; i++) {
+		for (let j = i + 1; j < hashTagsArr.length; j++) {
+			if (hashTagsArr[i].toLowerCase() === hashTagsArr[j].toLowerCase()) {
+				hashTagsInput.setCustomValidity('Хэш-тег должен быть уникальным');
+			}
+		}
+	}
+});
 
 function closeBigPicture() {
 	bigPicture.classList.add('hidden');
@@ -46,7 +87,6 @@ picturesImg.forEach((el, i) => {
 		document.addEventListener('keydown', onBigPhotoEscPress);
 	});
 });
-
 
 scaleControlSmallerButton.addEventListener('click', function(evt) {
 	evt.preventDefault();
@@ -148,7 +188,9 @@ rangeInput.addEventListener('input', function() {
 });
 
 const onImgUploadOverlayEscPress = (evt) => {
-	if (isEscEvent(evt)) {
+	if (hashTagsInput === document.activeElement || commentsField === document.activeElement) {
+		return evt;
+	} else if (isEscEvent(evt)) {
 		evt.preventDefault();
 		imgUploadOverlay.classList.add('hidden');
 		imgUploadInput.value = '';
@@ -165,5 +207,4 @@ imgUploadCancel.addEventListener('click', (evt) => {
 	evt.preventDefault();
 	imgUploadOverlay.classList.add('hidden');
 	imgUploadInput.value = '';
-	document.removeEventListener('keydown', onImgUploadOverlayEscPress);
 });
