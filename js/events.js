@@ -26,24 +26,18 @@ hashTagsInput.addEventListener('input', () => {
 		if (el === '') {
 			hashTagsInput.setCustomValidity('Используйте только один пробел!');
 			break;
-		}
-
-		if (el.indexOf('#') !== 0) {
+		} else if (el.indexOf('#') !== 0) {
 			hashTagsInput.setCustomValidity('Имя хэш-тега должно начинаться с символа "#"');
 			break;
-		}
-
-		if (el.length === 1) {
+		} else if (el.length === 1) {
 			hashTagsInput.setCustomValidity('Имя хэш-тега не может содержать только символ "#"');
 			break;
-		}
-
-		if (el.length > 20) {
+		} else if (el.length > 20) {
 			hashTagsInput.setCustomValidity('Максимальная длина одного хэш-тега 20 символов');
 			break;
+		} else {
+			hashTagsInput.setCustomValidity('');
 		}
-
-		hashTagsInput.setCustomValidity('');
 	}
 
 	if (hashTagsArr.length > 5) {
@@ -57,6 +51,9 @@ hashTagsInput.addEventListener('input', () => {
 			}
 		}
 	}
+
+	hashTagsInput.reportValidity();
+
 });
 
 function closeBigPicture() {
