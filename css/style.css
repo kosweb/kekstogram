@@ -1405,7 +1405,7 @@ main {
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1359px) {
+@media (min-width: 1024px) and (max-width: 1459px) {
   .container {
     width: 980px;
   }

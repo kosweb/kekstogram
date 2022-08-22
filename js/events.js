@@ -1,6 +1,6 @@
-import { isEscEvent } from './util.js';
-import { showBigPhoto, renderComments } from './pictures.js';
-import { photosObj, socialComments, bigPicture } from './pictures.js';
+import { isEscEvent, sendRequest } from './util.js';
+import { showBigPhoto, renderComments, renderPhotos } from './pictures.js';
+import { socialComments, bigPicture } from './pictures.js';
 
 const rangeMaxValue = 100;
 const imgUploadCancel = document.querySelector('.img-upload__cancel');
@@ -16,9 +16,9 @@ const scaleControlValue = document.querySelector('.scale__control--value');
 const imgUploadPreviewWrapper = document.querySelector('.img-upload__preview');
 const imgUploadPreview = document.querySelector('.img-upload__preview img');
 const bigPictureClose = document.querySelector('.big-picture__cancel');
-const picturesImg = document.querySelectorAll('.picture__img');
 const hashTagsInput = document.querySelector('.text__hashtags');
 const commentsField = document.querySelector('.text__description');
+const pictures = document.querySelector('.pictures');
 
 hashTagsInput.addEventListener('input', () => {
 	let hashTagsArr = hashTagsInput.value.trim().split(' ');
@@ -73,17 +73,41 @@ bigPictureClose.addEventListener('click', (evt) => {
 	closeBigPicture();
 });
 
-picturesImg.forEach((el, i) => {
-	el.addEventListener('click', (evt) => {
-		evt.preventDefault();
-		while (socialComments.firstChild) {
-			socialComments.removeChild(socialComments.firstChild);
-		}
-		renderComments(photosObj[i]);
-		showBigPhoto(photosObj[i]);
-		document.addEventListener('keydown', onBigPhotoEscPress);
-	});
+let photoData;
+const getRequestURL = 'https://24.javascript.pages.academy/kekstagram/data';
+
+sendRequest('GET', getRequestURL)
+.then(data => {
+	photoData = data;
+	renderPhotos(data);
+})
+.catch(err => console.log(err));
+
+pictures.addEventListener('click', (evt) => {
+	let target = evt.target.closest('.picture');
+	let picturesChildren = pictures.children;
+	let photoIndex = [...picturesChildren].indexOf(target);
+
+	if (photoIndex !== -1) {
+		renderComments(photoData[photoIndex - 2].comments);
+		showBigPhoto(photoData[photoIndex - 2]);
+	}
+
+	document.addEventListener('keydown', onBigPhotoEscPress);
 });
+
+
+// picturesImg.forEach((el, i) => {
+// 	el.addEventListener('click', (evt) => {
+// 		evt.preventDefault();
+// 		while (socialComments.firstChild) {
+// 			socialComments.removeChild(socialComments.firstChild);
+// 		}
+// 		// renderComments(photosObj[i]);
+// 		// showBigPhoto(photoData[i]);
+// 		document.addEventListener('keydown', onBigPhotoEscPress);
+// 	});
+// });
 
 scaleControlSmallerButton.addEventListener('click', function(evt) {
 	evt.preventDefault();
