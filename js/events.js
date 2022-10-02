@@ -72,7 +72,7 @@ bigPictureClose.addEventListener('click', (evt) => {
 	evt.preventDefault();
 	closeBigPicture();
 });
-
+	
 let photoData;
 const getRequestURL = 'https://24.javascript.pages.academy/kekstagram/data';
 
@@ -95,19 +95,6 @@ pictures.addEventListener('click', (evt) => {
 
 	document.addEventListener('keydown', onBigPhotoEscPress);
 });
-
-
-// picturesImg.forEach((el, i) => {
-// 	el.addEventListener('click', (evt) => {
-// 		evt.preventDefault();
-// 		while (socialComments.firstChild) {
-// 			socialComments.removeChild(socialComments.firstChild);
-// 		}
-// 		// renderComments(photosObj[i]);
-// 		// showBigPhoto(photoData[i]);
-// 		document.addEventListener('keydown', onBigPhotoEscPress);
-// 	});
-// });
 
 scaleControlSmallerButton.addEventListener('click', function(evt) {
 	evt.preventDefault();
