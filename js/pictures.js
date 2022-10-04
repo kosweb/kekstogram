@@ -1,4 +1,4 @@
-import { getRandomIndex, getRandomInt, sendRequest } from './util.js';
+import { onBigPhotoEscPress } from './events.js';
 
 const photoTemplate = document.getElementById('picture').content.querySelector('.picture');
 const commentTemplate = document.getElementById('comment').content.querySelector('.social__comment');
@@ -7,6 +7,15 @@ const bigPicture = document.querySelector('.big-picture');
 const socialComments = document.querySelector('.social__comments');
 
 const renderPhotos = (arr) => {
+	let picturesCollection = pictures.children;
+	if (picturesCollection.length > 2) {
+		for (let i = 2; i < picturesCollection.length; i++) {
+			picturesCollection[i].remove();
+			console.log(picturesCollection);
+		}
+	}
+	console.log(picturesCollection);
+
 	const fragment = document.createDocumentFragment();
 
 	arr.forEach(el => {
@@ -48,5 +57,21 @@ const showBigPhoto = (obj) => {
 	bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
 };
 
-export { showBigPhoto, renderComments, renderPhotos };
-export { socialComments, bigPicture };
+const runPictures = (data) => {
+	pictures.addEventListener('click', (evt) => {
+		let target = evt.target.closest('.picture');
+		let picturesChildren = pictures.children;
+		let photoIndex = [...picturesChildren].indexOf(target);
+
+		if (photoIndex !== -1) {
+			renderComments(data[photoIndex - 2].comments);
+			showBigPhoto(data[photoIndex - 2]);
+		}
+
+		document.addEventListener('keydown', onBigPhotoEscPress);
+	});
+};
+
+
+
+export { showBigPhoto, renderComments, renderPhotos, runPictures };

@@ -1,6 +1,4 @@
-import { isEscEvent, sendRequest } from './util.js';
-import { showBigPhoto, renderComments, renderPhotos } from './pictures.js';
-import { socialComments, bigPicture } from './pictures.js';
+import { isEscEvent } from './util.js';
 
 const rangeMaxValue = 100;
 const imgUploadCancel = document.querySelector('.img-upload__cancel');
@@ -18,7 +16,7 @@ const imgUploadPreview = document.querySelector('.img-upload__preview img');
 const bigPictureClose = document.querySelector('.big-picture__cancel');
 const hashTagsInput = document.querySelector('.text__hashtags');
 const commentsField = document.querySelector('.text__description');
-const pictures = document.querySelector('.pictures');
+const bigPicture = document.querySelector('.big-picture');
 
 hashTagsInput.addEventListener('input', () => {
 	let hashTagsArr = hashTagsInput.value.trim().split(' ');
@@ -71,29 +69,6 @@ const onBigPhotoEscPress = (evt) => {
 bigPictureClose.addEventListener('click', (evt) => {
 	evt.preventDefault();
 	closeBigPicture();
-});
-	
-let photoData;
-const getRequestURL = 'https://24.javascript.pages.academy/kekstagram/data';
-
-sendRequest('GET', getRequestURL)
-.then(data => {
-	photoData = data;
-	renderPhotos(data);
-})
-.catch(err => console.log(err));
-
-pictures.addEventListener('click', (evt) => {
-	let target = evt.target.closest('.picture');
-	let picturesChildren = pictures.children;
-	let photoIndex = [...picturesChildren].indexOf(target);
-
-	if (photoIndex !== -1) {
-		renderComments(photoData[photoIndex - 2].comments);
-		showBigPhoto(photoData[photoIndex - 2]);
-	}
-
-	document.addEventListener('keydown', onBigPhotoEscPress);
 });
 
 scaleControlSmallerButton.addEventListener('click', function(evt) {
@@ -216,3 +191,5 @@ imgUploadCancel.addEventListener('click', (evt) => {
 	imgUploadOverlay.classList.add('hidden');
 	imgUploadInput.value = '';
 });
+
+export { onBigPhotoEscPress };
