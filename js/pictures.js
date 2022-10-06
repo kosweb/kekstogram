@@ -7,14 +7,14 @@ const bigPicture = document.querySelector('.big-picture');
 const socialComments = document.querySelector('.social__comments');
 
 const renderPhotos = (arr) => {
-	let picturesCollection = pictures.children;
-	if (picturesCollection.length > 2) {
-		for (let i = 2; i < picturesCollection.length; i++) {
-			picturesCollection[i].remove();
-			console.log(picturesCollection);
+		const picturesChildren = pictures.children;
+
+		if (pictures.children.length > 2) {
+			for (let i = pictures.children.length - 1; i > 1; i--) {
+				pictures.children[i].remove();
+			}
 		}
-	}
-	console.log(picturesCollection);
+
 
 	const fragment = document.createDocumentFragment();
 
