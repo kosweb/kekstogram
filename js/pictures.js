@@ -45,6 +45,12 @@ const renderComments = (arr) => {
 	return socialComments.appendChild(fragment);
 };
 
+bigPicture.addEventListener('click', (evt) => {
+	if (evt.target.classList.contains('overlay')) {
+		bigPicture.classList.add('hidden');
+	}
+})
+
 const showBigPhoto = (obj) => {
 	bigPicture.classList.remove('hidden');
 	bigPicture.querySelector('.big-picture__img img').src = obj.url;
