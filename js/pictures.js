@@ -7,14 +7,12 @@ const bigPicture = document.querySelector('.big-picture');
 const socialComments = document.querySelector('.social__comments');
 
 const renderPhotos = (arr) => {
-		const picturesChildren = pictures.children;
 
-		if (pictures.children.length > 2) {
-			for (let i = pictures.children.length - 1; i > 1; i--) {
-				pictures.children[i].remove();
-			}
+	if (pictures.children.length > 2) {
+		for (let i = pictures.children.length - 1; i > 1; i--) {
+			pictures.children[i].remove();
 		}
-
+	}
 
 	const fragment = document.createDocumentFragment();
 
@@ -59,15 +57,16 @@ const showBigPhoto = (obj) => {
 
 const runPictures = (data) => {
 	pictures.addEventListener('click', (evt) => {
-		let target = evt.target.closest('.picture');
-		let picturesChildren = pictures.children;
-		let photoIndex = [...picturesChildren].indexOf(target);
-
-		if (photoIndex !== -1) {
-			renderComments(data[photoIndex - 2].comments);
-			showBigPhoto(data[photoIndex - 2]);
+		const target = evt.target;
+		if (target.classList.contains('picture__img')) {
+			const miniImgSrc = target.src;
+			for (let obj of data) {
+				if (miniImgSrc.indexOf(obj.url) > 0) {
+					renderComments(obj.comments);
+					showBigPhoto(obj);
+				}
+			}
 		}
-
 		document.addEventListener('keydown', onBigPhotoEscPress);
 	});
 };
@@ -75,3 +74,10 @@ const runPictures = (data) => {
 
 
 export { showBigPhoto, renderComments, renderPhotos, runPictures };
+
+
+// АЛГОРИТМ
+// 1 - ПРИ КЛИКЕ НА МИНИФОТКУ ПОЛУЧИТЬ ЕЕ САУРС
+// 2 - ПРОЙТИСЬ ПО МАССИВУ ОБЬЕКТОВ И СРАВНИТЬ САУРС КАЖДОГО ОБЬЕКТА
+// 		С САУРСОМ МИНИФОТКИ
+// 3 - ЕСЛИ САУРСЫ СОВПАЛИ, ВСТАВИТЬ ЭТОТ ОБЬЕКТ В БИГФОТО И В РЕНДЕРКОММЕНТС
