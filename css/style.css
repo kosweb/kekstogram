@@ -1,8 +1,6 @@
 /* Общие стили. Каркас
    ========================================================================== */
 
-import
-
 @font-face {
   font-family: "Open Sans";
   src: url("../fonts/OpenSansCondensed-Bold.woff2") format("woff2"),
@@ -806,6 +804,7 @@ main {
   position: absolute;
   top: 0;
   left: 610px;
+	cursor: pointer;
 }
 
 .img-upload__cancel:active {
@@ -985,6 +984,7 @@ main {
 
   background: none;
   border: none;
+	cursor: pointer;
 }
 
 .comments-loader {

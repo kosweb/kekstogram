@@ -5,6 +5,16 @@ const commentTemplate = document.getElementById('comment').content.querySelector
 const pictures = document.querySelector('.pictures');
 const bigPicture = document.querySelector('.big-picture');
 const socialComments = document.querySelector('.social__comments');
+const minCommentsCount = bigPicture.querySelector('.comments-min-count');
+const maxCommentsCount = bigPicture.querySelector('.comments-max-count');
+const commentsLoaderButton = bigPicture.querySelector('.social__comments-loader');
+
+
+bigPicture.addEventListener('click', (evt) => {
+	if (evt.target.classList.contains('overlay')) {
+		bigPicture.classList.add('hidden');
+	}
+});
 
 const renderPhotos = (arr) => {
 
@@ -45,20 +55,54 @@ const renderComments = (arr) => {
 	return socialComments.appendChild(fragment);
 };
 
-bigPicture.addEventListener('click', (evt) => {
-	if (evt.target.classList.contains('overlay')) {
-		bigPicture.classList.add('hidden');
+const commentsLoader = () => {
+	if (maxCommentsCount.textContent - minCommentsCount.textContent <= 5) {
+		Array.from(socialComments.children).forEach((el) => {
+			el.classList.contains('visually-hidden') ? el.classList.remove('visually-hidden') : false;
+		});
+		// прячу кнопку
+		commentsLoaderButton.classList.add('visually-hidden');
+		// делаю минимальное кол-во комментов максимальным
+		minCommentsCount.textContent = maxCommentsCount.textContent;
+	} else {
+		Array.from(socialComments.children).forEach((el, i) => {
+			if (i < +(minCommentsCount.textContent) + 5) {
+				el.classList.contains('visually-hidden') ? el.classList.remove('visually-hidden') : false;
+			}
+		});
+		minCommentsCount.textContent = +(minCommentsCount.textContent) + 5;
 	}
-})
+};
+
+const loadComments = (arr) => {
+	if (arr.length <= 5) {
+		minCommentsCount.textContent = arr.length;
+		// прячу кнопку
+		if (!(commentsLoaderButton.classList.contains('visually-hidden'))) {
+			commentsLoaderButton.classList.add('visually-hidden');
+		};
+		commentsLoaderButton.removeEventListener('click', commentsLoader);
+	} else {
+		minCommentsCount.textContent = 5;
+
+		// прохожусь по всему массиву КОММЕНТОВ и скрываю все после пятого
+		Array.from(socialComments.children).forEach((el, i) => {
+			i > 4 ? el.classList.add('visually-hidden') : false;
+		});
+		// показываю кнопку
+		if (commentsLoaderButton.classList.contains('visually-hidden')) {
+			commentsLoaderButton.classList.remove('visually-hidden');
+		};
+		commentsLoaderButton.addEventListener('click', commentsLoader);
+	}
+};
 
 const showBigPhoto = (obj) => {
 	bigPicture.classList.remove('hidden');
 	bigPicture.querySelector('.big-picture__img img').src = obj.url;
 	bigPicture.querySelector('.likes-count').textContent = obj.likes;
-	bigPicture.querySelector('.comments-count').textContent = obj.comments.length;
 	bigPicture.querySelector('.social__caption').textContent = obj.description;
-	bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
-	bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
+	maxCommentsCount.textContent = obj.comments.length;
 };
 
 const runPictures = (data) => {
@@ -70,6 +114,7 @@ const runPictures = (data) => {
 				if (miniImgSrc.indexOf(obj.url) > 0) {
 					renderComments(obj.comments);
 					showBigPhoto(obj);
+					loadComments(obj.comments);
 				}
 			}
 		}
@@ -77,13 +122,4 @@ const runPictures = (data) => {
 	});
 };
 
-
-
-export { showBigPhoto, renderComments, renderPhotos, runPictures };
-
-
-// АЛГОРИТМ
-// 1 - ПРИ КЛИКЕ НА МИНИФОТКУ ПОЛУЧИТЬ ЕЕ САУРС
-// 2 - ПРОЙТИСЬ ПО МАССИВУ ОБЬЕКТОВ И СРАВНИТЬ САУРС КАЖДОГО ОБЬЕКТА
-// 		С САУРСОМ МИНИФОТКИ
-// 3 - ЕСЛИ САУРСЫ СОВПАЛИ, ВСТАВИТЬ ЭТОТ ОБЬЕКТ В БИГФОТО И В РЕНДЕРКОММЕНТС
+export { renderPhotos, runPictures };
